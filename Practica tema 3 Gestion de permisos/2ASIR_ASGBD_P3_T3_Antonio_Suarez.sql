@@ -24,8 +24,6 @@ Contiene: 4 TABLAS
 segundo usuario llamado auditor_externo que pueda conectarse desde
 cualquier dirección IP de la red. */
 
-
-
 /* 2. Directiva de caducidad de credenciales: Configura el usuario auditor_externo
 para que su contraseña caduque obligatoriamente cada 30 días, obligándole a 
 reestablecerla pasado dicho plazo para evitar vulnerabilidades por credenciales
@@ -34,6 +32,22 @@ estáticas */
 /* 3. Directiva de control de sesión: Establece una restricción técnica para que las
 conexiones activas del usuario gestor_tienda no puedan superar 1 hora de
 inactividad o tiempo de vida activo, forzando la reautenticación tras dicho periodo */
+
+CREATE USER 'gestor_tienda'@'localhost' IDENTIFIED BY 'GT01.01';
+
+CREATE USER 'auditor_externo'@'%' IDENTIFIED BY 'AE01.01';
+
+ALTER USER 'auditor_externo'@'%' PASSWORD EXPIRE INTERVAL 30 DAY;
+
+-- La Tarea 1, el punto 3 no se puede hacer a un usuario en especifico 
+-- pero si de manera global, es decir, a todos los usuarios se le aplica
+-- el comando.
+
+SET GLOBAL wait_timeout = 3600; 
+
+
+
+
 
 -- Tarea 2: Creación y asignación de roles
 
