@@ -60,6 +60,14 @@ lectura sobre toda la base de datos tienda_informatica. */
 auditor_externo y configúralo explícitamente como rol por defecto para su
 sesión de trabajo */
 
+CREATE ROLE 'rol_consultor';
+GRANT SELECT ON tienda_informatica.* TO 'rol_consultor';
+GRANT 'rol_consultor' TO 'auditor_externo'@'%';
+SET DEFAULT ROLE 'rol_consultor' FOR 'auditor_externo'@'%';
+
+
+
+
 -- Tarea 3: Seguridad mediante Vistas y Privilegios Granulares
 
 /* Para proteger la información interna y confidencial de la empresa, el usuario
