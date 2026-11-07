@@ -33,15 +33,30 @@ estáticas */
 conexiones activas del usuario gestor_tienda no puedan superar 1 hora de
 inactividad o tiempo de vida activo, forzando la reautenticación tras dicho periodo */
 
-CREATE USER 'gestor_tienda'@'localhost' IDENTIFIED BY 'GT01.01';
 
-CREATE USER 'auditor_externo'@'%' IDENTIFIED BY 'AE01.01';
+/* RESULTADO: */
+
+/* Para que una contraseña sea realmente segura y proteja bien las cuentas,
+lo ideal es seguir estos criterios:
+
+Lo primero es que sea larga, teniendo al menos 12 caracteres. Además, 
+debe ser una buena mezcla de letras mayúsculas y minúsculas, números
+y algún símbolo especial (como una arroba, un asterisco o un signo de 
+exclamación). Por último, es fundamental evitar datos personales 
+o fáciles de adivinar, como fechas de cumpleaños, nombres de familiares
+o el nombre de la propia empresa. */
+
+CREATE USER 'gestor_tienda'@'localhost' IDENTIFIED BY 'gt#9547G3sT0R01.01';
+
+CREATE USER 'auditor_externo'@'%' IDENTIFIED BY 'gt#6137AuD1t0R01.01';
 
 ALTER USER 'auditor_externo'@'%' PASSWORD EXPIRE INTERVAL 30 DAY;
 
--- La Tarea 1, el punto 3 no se puede hacer a un usuario en especifico 
--- pero si de manera global, es decir, a todos los usuarios se le aplica
--- el comando.
+/* La Tarea 1, el punto 3; no pude aplicarle el límite de tiempo a un
+solo usuario porque en PHPMyAdmin las opciones de inactividad son 
+generales para todo el servidor y no permiten configurarse de forma 
+individual. Al ejecutar el comando, este afecta por igual a todas las 
+conexiones. */
 
 SET GLOBAL wait_timeout = 3600; 
 
@@ -84,7 +99,32 @@ consulta sobre dicha vista v_tecnicos_activos. */
 
 /* 3. Prueba de denegación: Comprueba y documenta qué ocurre si el usuario
 gestor_tienda intenta consultar directamente la tabla base tecnicos.
- */
+*/
+
+
+
+/* RESULTADO: */
+
+CREATE VIEW v_tecnicos_activos AS
+SELECT id, nombre, especialidad
+FROM tecnicos;
+
+GRANT SELECT ON tienda_informatica.v_tecnicos_activos TO 'gestor_tienda'@'localhost';
+
+
+/* Esta prueba sirve para comprobar que las medidas de seguridad cumplen 
+su objetivo.
+
+Como al usuario gestor_tienda no se le dio permiso para entrar a la 
+tabla, si intenta consultarla directamente con el comando 
+SELECT * FROM tecnicos;, el sistema no permite ejecutarlo y
+le devuelve un error de permisos.
+
+Esto demuestra que la seguridad funciona; los salarios de los 
+trabajadores quedan totalmente protegidos e invisibles para quienes
+no tienen autorización para verlos. */
+
+SELECT * FROM tecnicos;
 
 -- Tarea 4: Consistencia y control con WITH CHECK OPTION
 
