@@ -34,6 +34,9 @@ conexiones activas del usuario gestor_tienda no puedan superar 1 hora de
 inactividad o tiempo de vida activo, forzando la reautenticación tras dicho periodo */
 
 
+
+
+
 /* RESULTADO: */
 
 /* Para que una contraseña sea realmente segura y proteja bien las cuentas,
@@ -74,6 +77,10 @@ lectura sobre toda la base de datos tienda_informatica. */
 /* 3. Asignación y rol por defecto: Asigna el rol rol_consultor al usuario
 auditor_externo y configúralo explícitamente como rol por defecto para su
 sesión de trabajo */
+
+
+
+/* RESULTADO: */
 
 CREATE ROLE 'rol_consultor';
 GRANT SELECT ON tienda_informatica.* TO 'rol_consultor';
@@ -126,6 +133,12 @@ no tienen autorización para verlos. */
 
 SELECT * FROM tecnicos;
 
+
+
+
+
+
+
 -- Tarea 4: Consistencia y control con WITH CHECK OPTION
 
 /* 1. Vista con restricción de dominio: Crea una vista llamada
@@ -137,6 +150,37 @@ incorporando obligatoriamente la cláusula WITH CHECK OPTION. */
 administrador o un usuario con permisos intenta realizar una inserción de un artículo
 con un precio de 75.00 euros a través de dicha vista.
  */
+
+
+
+
+/* RESULTADO: */
+
+CREATE VIEW v_articulos_gama_baja AS
+SELECT id, nombre, precio, fabricante_id
+FROM articulos
+WHERE precio <= 50.00
+WITH CHECK OPTION;
+
+
+/* Si intentamos añadir un producto que cuesta más de 50 € 
+(por ejemplo, un teclado de 75 €) usando esta vista, el 
+sistema bloqueará la ejecución al instante y mostrará un 
+mensaje de error.
+
+Gracias al parámetro de seguridad que pusimos (WITH CHECK OPTION), 
+el sistema obliga a que cualquier producto nuevo cumpla estrictamente
+la condición de costar 50 € o menos. Si este parámetro no estuviera, 
+el artículo prohibido se colaría en la base de datos. */
+
+
+INSERT INTO v_articulos_gama_baja (nombre, precio, fabricante_id) 
+VALUES ('Teclado Mecánico Premium', 75.00, 4);
+
+
+
+
+
 
 -- Tarea 5: Auditoría, Resolución de Incidencias y Reflexión Crítica (Apartado de
 -- Análisis y Razonamiento)
@@ -156,3 +200,15 @@ cláusula WITH CHECK OPTION en la v_articulos_gama_baja pensando
 que "mejora el rendimiento de las consultas", ¿qué brecha lógica o inconsistencia de
 datos podría introducir en la tabla base articulos al insertar registros mediante la
 vista? Justifica tu respuesta. */
+
+
+
+
+/* RESULTADO: */
+
+
+
+
+
+
+
