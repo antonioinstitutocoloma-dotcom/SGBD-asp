@@ -206,9 +206,42 @@ vista? Justifica tu respuesta. */
 
 /* RESULTADO: */
 
+SHOW GRANTS FOR 'auditor_externo'@'%' USING 'rol_consultor';
+
+SELECT * FROM mysql.default_roles WHERE USER = 'auditor_externo';
+
+
+-- Tarea 5, el punto 2.
+
+/* Dar permisos totales (ALL PRIVILEGES) a un usuario es muy peligroso.
+
+Si la aplicación sufre un ataque (como una inyección SQL): 
+si está conectada con un usuario que tiene poderes de administrador, 
+el atacante podrá robar datos, borrar tablas enteras o destrozar 
+el sistema.
+
+Por eso existe el Principio de Mínimo Privilegio: consiste en darle 
+a cada usuario únicamente los permisos estrictamente 
+necesarios para trabajar (por ejemplo, solo leer o escribir en una 
+tabla concreta). De este modo, si ocurre un fallo o un ataque, el 
+daño se limita al mínimo posible. */
 
 
 
+-- Tarea 5, el punto 3.
+
+/* Si se quita esa regla de seguridad (WITH CHECK OPTION) 
+pensando que la base de datos irá más rápido, eso es
+un grave error de control.
+
+Al eliminarla, cualquier usuario podría colar productos caros 
+(por ejemplo, de 500 €) a través de una vista que está diseñada 
+exclusivamente para artículos económicos.
+
+Aunque el producto se guardaría en la tabla principal, desapareceria 
+de esta vista, arruinando los informes del sistema, falseando las
+búsquedas que se realizan en la pantalla y descontrolando el registro 
+de los productos. */
 
 
 
